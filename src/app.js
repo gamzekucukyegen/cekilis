@@ -1,14 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
-const names = ["gamze", "ezgi", "ece", "ceylan", "deniz"]; // Sabit liste
+const names = ["gamze", "ezgi", "ece", "ceylan", "deniz"];
 
-export default function App() {
+export default function Home() {
   const [currentUser, setCurrentUser] = useState("");
   const [results, setResults] = useState({});
   const [completedUsers, setCompletedUsers] = useState([]);
+
+  
+  useEffect(() => {
+    const savedResults = JSON.parse(localStorage.getItem("results")) || {};
+    const savedCompletedUsers = JSON.parse(localStorage.getItem("completedUsers")) || [];
+    setResults(savedResults);
+    setCompletedUsers(savedCompletedUsers);
+  }, []);
 
   const drawName = () => {
     const formattedUser = currentUser.trim().toLowerCase();
@@ -35,12 +43,15 @@ export default function App() {
     const randomIndex = Math.floor(Math.random() * availableNames.length);
     const drawnName = availableNames[randomIndex];
 
-    setResults((prevResults) => ({
-      ...prevResults,
-      [formattedUser]: drawnName,
-    }));
+    const updatedResults = { ...results, [formattedUser]: drawnName };
+    const updatedCompletedUsers = [...completedUsers, formattedUser];
 
-    setCompletedUsers([...completedUsers, formattedUser]);
+    setResults(updatedResults);
+    setCompletedUsers(updatedCompletedUsers);
+
+    // Sonuçları localStorage'a kaydet
+    localStorage.setItem("results", JSON.stringify(updatedResults));
+    localStorage.setItem("completedUsers", JSON.stringify(updatedCompletedUsers));
 
     alert(`Çekiliş sonucunuz: ${drawnName}`);
   };
