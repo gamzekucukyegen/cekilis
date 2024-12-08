@@ -52,6 +52,8 @@ export default function Home() {
     // Sonuçları localStorage'a kaydet
     localStorage.setItem("results", JSON.stringify(updatedResults));
     localStorage.setItem("completedUsers", JSON.stringify(updatedCompletedUsers));
+    console.log('RESULT' , results)
+    console.log('COMPLETED',completedUsers)
 
     alert(`Çekiliş sonucunuz: ${drawnName}`);
   };
